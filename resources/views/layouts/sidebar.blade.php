@@ -1,24 +1,5 @@
-<style>
-    /* warna default link sidebar */
-    .nav-sidebar .nav-link {
-        color: white !important; /* teks putih */
-    }
-
-    /* warna link aktif (ketika diklik) */
-    .nav-sidebar .nav-link.active {
-        background-color: white !important; /* kotak putih */
-        color: #091736ff !important; /* teks biru */
-        font-weight: bold;
-    }
-
-    /* ikon ikut berubah warna saat aktif */
-    .nav-sidebar .nav-link.active i {
-        color: #091736ff !important;
-    }
-</style>
-
-<aside class="main-sidebar elevation-4" style="background-color:#647aa8ff; color:white;">
-    <a href="/" class="brand-link" style="background-color:#647aa8ff; color:white;">
+<aside class="main-sidebar sidebar-dark-orange elevation-4" >
+    <a href="/" class="brand-link" >
     <!-- Logo -->
         <img src="{{ asset('images/septri1.png') }}" alt="logo" class="brand-image img-circle elevation-3" style="opacity: .8">
         <span class="brand-text font-weight-light">{{ config('app.name') }}</span>
