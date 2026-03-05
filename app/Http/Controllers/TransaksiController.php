@@ -8,7 +8,8 @@ use App\Models\Pelanggan;
 use App\Models\Penjualan;
 use App\Models\Produk;
 use App\Models\User;
-use Cart;
+use Jackiedo\Cart\Facades\Cart;
+use Illuminate\Support\Facades\DB;
 
 class TransaksiController extends Controller
 {
@@ -41,18 +42,18 @@ class TransaksiController extends Controller
         ]);
     }
     public function getProduk($id)
-{
-    $produk = Produk::findOrFail($id);
+    {
+        $produk = Produk::findOrFail($id);
 
-    return response()->json([
-        'id' => $produk->id,
-        'nama' => $produk->nama_produk,
-        'harga' => $produk->harga, // Gunakan harga final (setelah diskon)
-        'harga_jual' => $produk->harga_jual, // Harga jual sebelum diskon
-        'diskon' => $produk->diskon,
-        'stok' => $produk->stok,
-    ]);
-}
+        return response()->json([
+            'id' => $produk->id,
+            'nama' => $produk->nama_produk,
+            'harga' => $produk->harga, // Gunakan harga final (setelah diskon)
+            'harga_jual' => $produk->harga_jual, // Harga jual sebelum diskon
+            'diskon' => $produk->diskon,
+            'stok' => $produk->stok,
+        ]);
+    }
 
     public function store(Request $request)
     {
@@ -83,11 +84,11 @@ class TransaksiController extends Controller
         $allItems = $cartDetails->get('items');
         $subtotal = 0;
         foreach ($allItems as $item) {
-        $subtotal += $item->price * $item->quantity;
+            $subtotal += $item->price * $item->quantity;
         }
 
         $no = $lastTransaction
-            ? str_pad(((int)substr($lastTransaction->nomor_transaksi, 8)) + 1, 4, '0', STR_PAD_LEFT)
+            ? str_pad(((int) substr($lastTransaction->nomor_transaksi, 8)) + 1, 4, '0', STR_PAD_LEFT)
             : '0001';
 
         $nomor_transaksi = $today . $no;
@@ -161,6 +162,11 @@ class TransaksiController extends Controller
 
     public function destroy(Request $request, Penjualan $transaksi)
     {
+        // Hanya admin yang boleh membatalkan
+        if ($request->user()->role !== 'admin') {
+            return back()->with('error', 'Anda tidak memiliki izin untuk membatalkan transaksi.');
+        }
+
         $transaksi->update([
             'status' => 'batal'
         ]);
@@ -177,6 +183,7 @@ class TransaksiController extends Controller
 
         return back()->with('destroy', 'success');
     }
+
 
     public function produk(Request $request)
     {

@@ -1,7 +1,7 @@
 <aside class="main-sidebar sidebar-dark-orange elevation-4" >
     <a href="/" class="brand-link" >
     <!-- Logo -->
-        <img src="{{ asset('images/septri1.png') }}" alt="logo" class="brand-image img-circle elevation-3" style="opacity: .8">
+        <img src="{{ asset('images/logo.jpeg') }}" alt="logo" class="brand-image img-circle elevation-3" style="opacity: .8">
         <span class="brand-text font-weight-light">{{ config('app.name') }}</span>
     </a>
 

@@ -49,7 +49,7 @@
                         <th>Sub Total</th>
                     </tr>
                 </thead>
-               <tbody>
+                <tbody>
                     @foreach ($detilPenjualan as $key => $item)
                         @php
                             $diskon = $item->diskon ?? 0;
@@ -82,16 +82,19 @@
 
         <div class="card-footer form-inline">
             <a href="{{ route('transaksi.index') }}" class="btn btn-secondary mr-2">Ke Transaksi</a>
-            @if ($penjualan->status == 'selesai')
+
+            @if ($penjualan->status == 'selesai' && auth()->user()->role == 'admin')
                 <button type="button" class="btn btn-danger ml-auto mr-2" data-toggle="modal" data-target="#modalBatal">
                     Dibatalkan
                 </button>
             @endif
+
             <a target="_blank" href="{{ route('transaksi.cetak', ['transaksi' => $penjualan->id]) }}"
                 class="btn btn-primary @if ($penjualan->status == 'batal') ml-auto @endif">
                 <i class="fas fa-print mr-2"></i> Cetak
             </a>
         </div>
+
     </div>
 @endsection
 
@@ -108,8 +111,8 @@
 
                 <div class="modal-body">
                     <p>Apakah yakin akan dibatalkan?</p>
-                    <form action="{{ route('transaksi.destroy', ['transaksi' => $penjualan->id]) }}"
-                        method="post" style="display: none;" id="formBatal">
+                    <form action="{{ route('transaksi.destroy', ['transaksi' => $penjualan->id]) }}" method="post"
+                        style="display: none;" id="formBatal">
                         @csrf
                         @method('DELETE')
                     </form>
@@ -126,8 +129,8 @@
 
 @push('scripts')
     <script>
-        $(function(){
-            $('#yesBatal').click(function(){
+        $(function () {
+            $('#yesBatal').click(function () {
                 $('#formBatal').submit();
             });
         })
